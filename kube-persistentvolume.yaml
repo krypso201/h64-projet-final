@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: pv1
+  labels:
+    type: local
+spec: 
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  volumeMode: Filesystem
+  hostPath:
+      path: /etc/volume/nginx

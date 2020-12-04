@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec: 
+      containers:
+      - env:
+        - name: NGINX_HOST
+          value: localhost
+        - name: NGINX_PORT
+          value: "80"
+        image: nginx
+        name: web
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/volume/nginx/nginx.conf
+          name: web-storage
+      volumes:
+      - name: web-storage
+        persistentVolumeClaim:
+          claimName: web-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service 
+spec:
+  selector:
+    app: web
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: web-claim 
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: manual
