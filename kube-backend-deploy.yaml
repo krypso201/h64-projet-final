@@ -15,6 +15,7 @@ spec:
     spec:
       containers:
       - image: krypso/h64-projet-final:backend
+        imagePullPolicy: Always
         name: backend
         ports:
         - containerPort: 8000
